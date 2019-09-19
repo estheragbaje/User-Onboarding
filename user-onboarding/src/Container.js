@@ -38,3 +38,85 @@ const placeholders = {
   email: "Enter your email here...",
   password: "Enter your password here"
 };
+
+// Step 4: Create the Form Component with props arg
+
+//Step 5: Call Formik Component passing initialValues and onSubmit as props. onSubmit props.onSubmit as Props
+
+//Step 6: Creating a new compnent to send to axios
+
+export function UserForm(props) {
+  return (
+    <Formik
+      validationSchema={userFormValidation}
+      initialValues={initialUserForm}
+      onSubmit={props.onSubmit}
+      render={props => {
+        return (
+          <form onSubmit={props.handleSubmit}>
+            <div>
+              <label>
+                Name
+                <Field
+                  name="name"
+                  type="text"
+                  placeholder={placeholders.name}
+                />
+              </label>
+              <ErrorMessage name="name" component="div" />
+            </div>
+            <div>
+              <label>
+                Age
+                <Field
+                  name="age"
+                  type="number"
+                  placeholder={placeholders.age}
+                />
+              </label>
+              <ErrorMessage name="age" component="div" />
+            </div>
+            <div>
+              <label>
+                Email
+                <Field
+                  name="email"
+                  type="email"
+                  placeholder={placeholders.email}
+                />
+              </label>
+              <ErrorMessage name="email" component="div" />
+            </div>
+            <div>
+              <label>
+                Password
+                <Field
+                  name="password"
+                  type="password"
+                  placeholder={placeholders.password}
+                />
+              </label>
+              <ErrorMessage name="password" component="div" />
+            </div>
+            <div>
+              <label>
+                Terms of Service
+                <Field
+                  name="terms"
+                  checked={props.values.terms}
+                  type="checkbox"
+                />
+              </label>
+              <ErrorMessage name="terms" component="div" />
+            </div>
+            <div>
+              <button disabled={!props.isValid} type="submit">
+                Submit
+              </button>
+            </div>
+          </form>
+        );
+      }}
+    ></Formik>
+  );
+}
