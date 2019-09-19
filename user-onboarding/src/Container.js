@@ -120,3 +120,86 @@ export function UserForm(props) {
     ></Formik>
   );
 }
+
+const usersApi = "https://reqres.in/api/users";
+
+export default function Container() {
+  const [usersList, setUsersList] = useState([]);
+  const [serverError, setServerError] = useState("");
+
+  const fetchUsers = () => {
+    // get those users from the api
+    // and set them into the right slice of state!
+    // put something in `serverError`
+    axios
+      .get(usersApi)
+      .then(res => {
+        let fetchedData = res.data.data;
+
+        //Re-format the data to the one that matches the form
+        fetchedData = fetchedData.map(user => ({
+          name: user.first_name,
+          email: user.email,
+          id: user.id
+        }));
+
+        setUsersList(fetchedData);
+      })
+      .catch(err => {
+        setServerError(err.message);
+      });
+  };
+
+  const addUser = (formValues, actions) => {
+    // THIS FUNCTION NEEDS TO COMPLY WITH FORMIK
+    // REQUIREMENTS FOR ACCEPTABLE `onSubmit` FUNCTIONS!
+    // It should take two args:
+    //     (values) the form values (object)
+    //     (actions) formik actions (object)
+    // And perform a POST request to the api
+    // const userToPost = {
+    //   name: formValues.name,
+    //   age: formValues.age,
+    //   email: formValues.email,
+    //   password: formValues.password,
+    //   terms: formValues.terms
+    // };
+    // console.log(formValues);
+    axios
+      .post(usersApi, formValues)
+      .then(res => {
+        console.log(res.data);
+        // res.data contains the newly created friend
+        const newLyCreatedUserFromServer = res.data;
+        setUsersList([...usersList, newLyCreatedUserFromServer]);
+        actions.resetForm();
+      })
+      .catch(err => {
+        debugger;
+      });
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  return (
+    <div>
+      {/* should be its own component: */}
+      {serverError}
+
+      <UserForm onSubmit={addUser} />
+
+      {/* should be its own component: */}
+      {usersList.length
+        ? usersList.map(user => (
+            <div key={user.id}>
+              Name: {user.name}
+              <br />
+              Email: {user.email}
+            </div>
+          ))
+        : "No Users. Sad!"}
+    </div>
+  );
+}
