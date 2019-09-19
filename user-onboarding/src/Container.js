@@ -29,3 +29,12 @@ const userFormValidation = yup.object().shape({
   password: yup.string().required("A password is required"),
   terms: yup.boolean()
 });
+
+// Step 3: Setting placeholders values
+
+const placeholders = {
+  name: "Enter your name here...",
+  age: "Enter your age here...",
+  email: "Enter your email here...",
+  password: "Enter your password here"
+};
